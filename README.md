@@ -3,9 +3,10 @@
 - **users table in the database** with columns username and password_hash. NEVER save plain text passwords anywhere.
 - **csrf secret** saved in .env
 - register page with form accepting username and password input. Serverside create a **csrf token** based on a secret, pass token via props. Submitting the form sends a **'POST' request** to the register api: username, password and token in the request body
-- **api 'register'** , verifies csrf token against secret, hashes the password with **argon2** and saves the username and the password_hash in the database
+- **api 'register'** , verifies csrf token against secret, checks if the username alrady exists, if yes, send back 403 status, if not, hashes the password with **argon2** and saves the username and the password_hash in the database
 - login page accepting username and password input
-- **api 'login'** finds the username in the database and checks if password and password hash match
+- **api 'login'** tires to find the username in the database and checks if password and password hash match, 
+
 - protected routes: redirect when a non logged in user tries to access a restricted page
 
 ## Libraries
