@@ -1,24 +1,38 @@
-# Cheatsheet user authentication an authorization.
-
+# Cheatsheet user authentication and authorization.
+## Requirements
 - users table in the databse with columns username and password_hash. NEVER save plain text passwords anywhere.
-- register page accepting username and password input
-- api 'register' handler, which hashes the password and saves the username and the password_hash in the database
+- csrf secret saved in .env
+- register page with form accepting username and password input. Serverside create a csrf token based on a secret, pass token via props. Submitting the form sends a 'POST' request to the register api, username, password and token in the request body
+- api 'register' handler, verifies csrff token against secret, hashes the password with argon2 and saves the username and the password_hash in the database
 - login page accepting username and password input
 - api 'login' handler that checks for the username in the database and checks if password and password hash match
 - protected routes: redirect when a non logged in user tries to access a restricted page
 
-## libraries used
-argon2: creates a hash from a password and veryfies a password against a hash. hash() and verify() return a promise.
+## Libraries
+argon2: create a hash from a password, save the password hash in the users table. On login, veryfy the password against the hash. 
+
+hash() and verify() return a promise.
 ```node.js
-const hash = await argon2.hash(password)
-argon2.verify(hash, password)
+const hash = await argon2.hash(password) //creates a hash from a password
+argon2.verify(hash, password) // verify a password against a hash
 ```
-csrf:
+csrf: create and save a secret in environment variable, generate tokens serverside based on that secret (on every page refresh), pass the token via props, send the token along with the registration request, have the registration handler verify the csrf token against the secret
 ```node.js
 const Tokens = require('csrf')
 const tokens = new Tokens()
-const secret = tokens.secretSync()
+const secret = tokens.secretSync() // creates a secret, save in .env file: CSRF_TOKEN_SECRET = xxxxxxxxxxxx
+const token = tokens.create(secret) // creates a token based on the secret
+const isVerified = tokens.verify( secret, token)
+
+// in getServerSideProps:
+const Tokens = (await import('csrf')).default;
+const secret = process.env.CSRF_TOKEN_SECRET
+if (typeof secret === 'undefined') {
+throw new Error ('CSRF_TOKEN_SECRET environment variable is undefined') }
 const token = tokens.create(secret)
+
+ret
+
 ```
 crypto
 ```node.js
