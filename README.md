@@ -9,14 +9,16 @@
 - protected routes: redirect when a non logged in user tries to access a restricted page
 
 ## Libraries
-argon2: create a hash from a password, save the password hash in the users table. On login, veryfy the password against the hash. 
+###argon2
+create a hash from a password, save the password hash in the users table. On login, veryfy the password against the hash. 
 
 hash() and verify() return a promise.
 ```node.js
 const hash = await argon2.hash(password) //creates a hash from a password
 argon2.verify(hash, password) // verify a password against a hash
 ```
-csrf: create and save a secret in environment variable, generate tokens serverside based on that secret (on every page refresh), pass the token via props, send the token along with the registration request, have the registration handler verify the csrf token against the secret
+###csrf
+create and save a secret in environment variable, generate tokens serverside based on that secret (on every page refresh), pass the token via props, send the token along with the registration request, have the registration handler verify the csrf token against the secret
 ```node.js
 const Tokens = require('csrf')
 const tokens = new Tokens()
@@ -34,15 +36,15 @@ const token = tokens.create(secret)
 ret
 
 ```
-crypto
+###crypto
 ```node.js
 
 ```
-cookie
+###cookie
 ```node.js
 
 ```
-next-cookie
+###next-cookie
 ```node.js
 
 ```
