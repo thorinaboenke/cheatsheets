@@ -4,11 +4,26 @@
 - register page accepting username and password input
 - api 'register' handler, which hashes the password and saves the username and the password_hash in the database
 - login page accepting username and password input
-- api 'register' handler that checks for the username in the database and checks if password and password hash match
-- 
+- api 'login' handler that checks for the username in the database and checks if password and password hash match
+- protected routes: redirect when a non logged in user tries to access a restricted page
 
 ## hash function
-Does not run client side 8 to prevent reverse engeneering)
+Does not run client side 8 to prevent reverse engeneering
+## requests to register and login endpoint:
+Method: 'POST'
+## to redirect from pages 
+```javascript
+export async function getServerSideProps(){
+if () {
+return{
+	redirect: {
+		permanent:false,
+		destination: '/login',
+		}
+	}
+	}
+}
+```
 
 
 
@@ -27,3 +42,4 @@ exports.down = async (sql) => {
 };
 
 ```
+The token (a string of random characters) is created with the crypto library (included with node.js), the expiry timestamp is set to the current date + 24 hours so the token will expire after 24 h. The user_id references a user id in the user table. In case this user gets deleted or updated also the corresponding entries in the sessions table will be deleted or updated (CASCADE).
