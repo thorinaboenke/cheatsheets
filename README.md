@@ -136,7 +136,7 @@ const { username, password, token } = request.body;
     const passwordHash = await argon2.hash(password);
     await registerUser(username, passwordHash);
   } catch (err) {
-    return response.status(501).send({ answer: 4, success: false });
+    return response.status(501).send({ success: false });
   }
 
   response.send({ success: true });
@@ -200,7 +200,7 @@ export default async function handler(request, response) {
 }
 ```
 
-### functions to insert users and sesions in the database
+### functions to insert users and sessions in the database, delete expired sessions, delete sessions on logout
 ```javascript
 export async function registerUser(username, passwordHash) {
   // insert the user in the user table
